@@ -1,0 +1,181 @@
+/* Custom styles to enhance Bootstrap */
+
+/* Improve dark mode contrast */
+[data-bs-theme="dark"] {
+  --bs-body-bg: #121212;
+  --bs-body-color: #e9ecef;
+  --bs-primary: #4caf50;
+  --bs-primary-rgb: 76, 175, 80;
+  --sidebar-bg: #292929;
+  --text-color: #ffffff;
+  --text-muted: rgba(255, 255, 255, 0.6);
+  --border-color: rgba(255, 255, 255, 0.1);
+  --editor-bg: #1e1e1e;
+}
+
+/* Light mode custom colors */
+[data-bs-theme="light"] {
+  --bs-primary: #4caf50;
+  --bs-primary-rgb: 76, 175, 80;
+  --sidebar-bg: #f8f9fa;
+  --text-color: #333333;
+  --text-muted: rgba(0, 0, 0, 0.6);
+  --border-color: rgba(0, 0, 0, 0.1);
+  --editor-bg: #ffffff;
+}
+
+/* Task Editor Styles */
+.task-editor {
+  position: fixed !important;
+  top: 48px !important;
+  right: 0 !important;
+  width: 400px !important;
+  height: calc(100vh - 48px) !important;
+  z-index: 9999 !important;
+  box-shadow: -5px 0 15px rgba(0, 0, 0, 0.2) !important;
+  overflow-y: auto !important;
+  background-color: var(--editor-bg) !important;
+  color: var(--text-color) !important;
+  border-left: 1px solid var(--border-color) !important;
+  transition: width 0.3s ease !important;
+}
+
+/* Planned task styles */
+.planned-task {
+  position: relative;
+}
+
+.planned-task .due-date-badge {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background-color: rgba(76, 175, 80, 0.1);
+  color: var(--bs-primary);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.planned-task.overdue .due-date-badge {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: var(--bs-danger);
+}
+
+/* Apply text colors based on theme */
+.text-theme {
+  color: var(--text-color) !important;
+}
+
+.text-theme-muted {
+  color: var(--text-muted) !important;
+}
+
+.border-theme {
+  border-color: var(--border-color) !important;
+}
+
+/* Custom scrollbar for task list */
+.overflow-auto::-webkit-scrollbar {
+  width: 8px;
+}
+
+.overflow-auto::-webkit-scrollbar-track {
+  background: var(--bs-body-bg);
+}
+
+.overflow-auto::-webkit-scrollbar-thumb {
+  background-color: var(--bs-gray-500);
+  border-radius: 20px;
+}
+
+/* Task hover effect */
+.list-group-item {
+  transition: background-color 0.2s;
+}
+
+.list-group-item:hover {
+  background-color: var(--bs-gray-100);
+}
+
+[data-bs-theme="dark"] .list-group-item:hover {
+  background-color: var(--bs-gray-800);
+}
+
+/* Custom checkbox styling */
+.form-check-input:checked {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+}
+
+/* Improve modal backdrop */
+.modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .modal-dialog {
+    margin: 0.5rem;
+  }
+  
+  .task-editor {
+    width: 100% !important;
+  }
+}
+
+/* Ensure full height on mobile */
+html,
+body,
+#root {
+  height: 100%;
+}
+
+.sidebar-wrapper {
+  height: 100%;
+  transition: width 0.3s ease;
+  overflow: hidden;
+}
+
+.sidebar-wrapper.open {
+  width: 240px;
+}
+
+@media (max-width: 768px) {
+  .sidebar-wrapper {
+    position: fixed;
+    z-index: 1030;
+    height: 100vh;
+    background-color: var(--sidebar-bg);
+  }
+
+  .sidebar-wrapper:not(.open) {
+    width: 0;
+  }
+}
+
+/* Fix for Bootstrap dark mode form controls */
+[data-bs-theme="dark"] .form-control {
+  background-color: #1f1f1f;
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-bs-theme="dark"] .form-control:focus {
+  background-color: #1f1f1f;
+  color: #fff;
+  border-color: var(--bs-primary);
+}
+
+[data-bs-theme="dark"] .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* Task item selected state */
+.task-item.selected {
+  border: 2px solid var(--bs-primary) !important;
+  background-color: rgba(76, 175, 80, 0.1) !important;
+}
+
