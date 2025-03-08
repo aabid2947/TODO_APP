@@ -1,8 +1,14 @@
 import { useSelector } from "react-redux";
 import { CloudRain } from "lucide-react";
+import { useEffect } from "react";
 
 const WeatherWidget = () => {
   const { data, loading, error } = useSelector((state) => state.weather);
+  console.log("Weather data:", data);
+
+  useEffect(() => {
+    console.log("Weather updated:", data);
+  }, [data]);
 
   if (loading) {
     return (

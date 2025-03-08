@@ -6,25 +6,24 @@ const initialState = {
   error: null,
 };
 
+const API = `http://api.weatherapi.com/v1/current.json?key=e5501bce584b48c291744003250803&q=London&aqi=no`;
 export const fetchWeather = createAsyncThunk(
   "weather/fetchWeather",
   async (city = "London", { rejectWithValue }) => {
     try {
-      const response = await fetch(
-        `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${import.meta.env.VITE_OPENWEATHER_API_KEY || "demo_key"}`
-      );
-
+      const response = await fetch(API);
       if (!response.ok) {
         throw new Error("Weather data not available");
       }
-
       const data = await response.json();
-
+      // Adjusted for WeatherAPI.com structure:
       return {
-        temperature: data.main.temp,
-        condition: data.weather[0].main,
-        icon: `https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png`,
-        location: data.name,
+        temperature: data.current.temp_c,
+        condition: data.current.condition.text,
+        icon: data.current.condition.icon.startsWith("//")
+          ? "https:" + data.current.condition.icon
+          : data.current.condition.icon,
+        location: data.location.name,
       };
     } catch (error) {
       return rejectWithValue(error.message);

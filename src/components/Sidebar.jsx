@@ -1,22 +1,19 @@
 "use client";
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/auth/authSlice";
 import { useTheme } from "../contexts/ThemeContext";
 import { Home, CheckSquare, Calendar, Star, LogOut, Plus } from "lucide-react";
 
 const Sidebar = ({ user, activeView = "all", onViewChange }) => {
   const dispatch = useDispatch();
-  const { theme, toggleTheme } = useTheme();
+  const { theme } = useTheme();
 
-  const handleLogout = () => {
-    dispatch(logout());
-  };
-
-  // Calculate progress percentage (mock data for demonstration)
-  const totalTasks = 11;
-  const completedTasks = 7;
-  const progressPercentage = (completedTasks / totalTasks) * 100;
+  // Get tasks from the Redux store
+  const { tasks } = useSelector((state) => state.tasks);
+  const totalTasks = tasks?.length || 0;
+  const completedTasks = tasks?.filter((task) => task.completed).length || 0;
+  const progressPercentage = totalTasks === 0 ? 0 : (completedTasks / totalTasks) * 100;
 
   // Inline style objects
   const sidebarContainerStyle = {
@@ -91,11 +88,12 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
     justifyContent: "center",
   };
 
-  const progressPercentageStyle = {
+  const progressCenterStyle = {
     position: "absolute",
-    fontSize: "1.25rem",
-    fontWeight: 500,
-    color: "#4caf50",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    textAlign: "center",
   };
 
   const logoutButtonStyle = {
@@ -107,6 +105,10 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
     display: "flex",
     alignItems: "center",
     marginBottom: "0.5rem",
+  };
+
+  const handleLogout = () => {
+    dispatch(logout());
   };
 
   return (
@@ -132,28 +134,28 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
       {/* Navigation */}
       <div style={{ paddingLeft: "1rem", paddingRight: "1rem" }}>
         <nav className="nav flex-column">
-          <div 
+          <div
             style={activeView === "all" ? activeNavLinkStyle : navLinkStyle}
             onClick={() => onViewChange("all")}
           >
             <CheckSquare size={18} style={{ marginRight: "0.5rem" }} />
             <span>All Tasks</span>
           </div>
-          <div 
+          <div
             style={activeView === "important" ? activeNavLinkStyle : navLinkStyle}
             onClick={() => onViewChange("important")}
           >
             <Star size={18} style={{ marginRight: "0.5rem" }} />
             <span>Important</span>
           </div>
-          <div 
+          <div
             style={activeView === "planned" ? activeNavLinkStyle : navLinkStyle}
             onClick={() => onViewChange("planned")}
           >
             <Calendar size={18} style={{ marginRight: "0.5rem" }} />
             <span>Planned</span>
           </div>
-          <div 
+          <div
             style={activeView === "assigned" ? activeNavLinkStyle : navLinkStyle}
             onClick={() => onViewChange("assigned")}
           >
@@ -204,8 +206,13 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
                   strokeDasharray={`${progressPercentage}, 100`}
                 />
               </svg>
-              <div style={progressPercentageStyle}>
-                {Math.round(progressPercentage)}%
+              <div style={progressCenterStyle}>
+                <div style={{ fontSize: "1.25rem", fontWeight: 500, color: "#4caf50" }}>
+                  {Math.round(progressPercentage)}%
+                </div>
+                <div style={{ fontSize: "0.875rem", color: theme === "dark" ? "#fff" : "#333" }}>
+                  {completedTasks} / {totalTasks}
+                </div>
               </div>
             </div>
           </div>
