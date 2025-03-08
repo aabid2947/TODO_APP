@@ -10,40 +10,46 @@ import TaskEditor from "../components/TaskEditor";
 const Dashboard = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
+
+  // State for selected task and UI control
   const [selectedTask, setSelectedTask] = useState(null);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-  const [activeView, setActiveView] = useState("all"); // "all", "important", "planned", "assigned"
+  const [activeView, setActiveView] = useState("all"); // Available views: "all", "important", "planned", "assigned"
   const [showTaskEditor, setShowTaskEditor] = useState(false);
 
+  // Load tasks and weather data on component mount
   useEffect(() => {
     dispatch(loadTasks());
     dispatch(fetchWeather());
   }, [dispatch]);
 
+  // Handle task selection
   const handleTaskSelect = (task) => {
     console.log("Task selected:", task);
     setSelectedTask(task);
     setShowTaskEditor(true);
   };
 
+  // Toggle sidebar visibility
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+  // Handle view change (e.g., switching to "important" or "planned" tasks)
   const handleViewChange = (view) => {
     setActiveView(view);
-    // Close the task editor when changing views
     setShowTaskEditor(false);
     setSelectedTask(null);
   };
 
+  // Close task editor
   const handleCloseTaskEditor = () => {
     console.log("Closing TaskEditor");
     setShowTaskEditor(false);
     setSelectedTask(null);
   };
 
-  // Determine the filter mode based on active view
+  // Determine filter options based on the selected view
   const getFilterMode = () => {
     switch (activeView) {
       case "important":
@@ -59,6 +65,7 @@ const Dashboard = () => {
 
   return (
     <div className="vh-100 d-flex flex-column position-relative">
+      {/* Navbar with sidebar toggle */}
       <Navbar toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
 
       <div className="flex-grow-1 d-flex overflow-hidden">
@@ -78,6 +85,7 @@ const Dashboard = () => {
           />
         </div>
 
+        {/* Main task list container */}
         <div 
           className="flex-grow-1 d-flex flex-column overflow-hidden"
           style={{
@@ -93,7 +101,7 @@ const Dashboard = () => {
           />
         </div>
 
-        {/* Task Editor */}
+        {/* Task Editor (conditionally rendered) */}
         {selectedTask && showTaskEditor && (
           <TaskEditor 
             task={selectedTask} 

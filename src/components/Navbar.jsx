@@ -1,13 +1,19 @@
+"use client";
+
 import React from "react";
 import { Menu, Search, Settings, Sun, Moon } from "lucide-react";
 import { useTheme } from "../contexts/ThemeContext";
-import Logo from "../assets/logo.png"
+import Logo from "../assets/logo.png";
 
+// Navbar component displays the top navigation bar
+// It receives toggleSidebar and isSidebarOpen as props
 const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
+  // Get current theme and toggle function from ThemeContext
   const { theme, toggleTheme } = useTheme();
 
   return (
     <>
+      {/* Scoped styles for the Navbar */}
       <style>{`
         .main-navbar {
           background-color: ${theme === "dark" ? "#292929" : "#f8f9fa"};
@@ -34,9 +40,12 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
           background-color: ${theme === "dark" ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)"};
         }
       `}</style>
+
+      {/* Main Navbar container */}
       <nav className="main-navbar">
-        {/* Left side: Menu button + Logo + Brand */}
+        {/* Left side: Menu button, Logo, and Brand */}
         <div className="d-flex align-items-center gap-3">
+          {/* Button to toggle sidebar */}
           <button
             className="nav-icon-btn"
             onClick={toggleSidebar}
@@ -45,9 +54,9 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
             <Menu size={20} />
           </button>
 
-          {/* Logo + "DoIt" brand */}
+          {/* Logo and brand name */}
           <div className="d-flex align-items-center">
-            {/* Update /logo.svg to your actual icon path */}
+            {/* Display logo image */}
             <img
               src={Logo}
               alt="DoIt Icon"
@@ -65,14 +74,17 @@ const Navbar = ({ toggleSidebar, isSidebarOpen }) => {
           </div>
         </div>
 
-        {/* Right side: Search, Settings, Theme Toggle */}
+        {/* Right side: Search, Settings, and Theme Toggle */}
         <div className="d-flex align-items-center gap-3">
+          {/* Search icon button */}
           <button className="nav-icon-btn">
             <Search size={20} />
           </button>
+          {/* Settings icon button */}
           <button className="nav-icon-btn">
             <Settings size={20} />
           </button>
+          {/* Theme toggle button: shows Sun icon in dark mode and Moon in light mode */}
           <button
             className="nav-icon-btn"
             onClick={toggleTheme}

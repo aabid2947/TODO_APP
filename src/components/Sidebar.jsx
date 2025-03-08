@@ -9,13 +9,17 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
   const dispatch = useDispatch();
   const { theme } = useTheme();
 
-  // Get tasks from the Redux store
+  // Retrieve the tasks from Redux store
   const { tasks } = useSelector((state) => state.tasks);
+  // Calculate total tasks and number of completed tasks
   const totalTasks = tasks?.length || 0;
   const completedTasks = tasks?.filter((task) => task.completed).length || 0;
+  // Calculate the progress percentage of completed tasks
   const progressPercentage = totalTasks === 0 ? 0 : (completedTasks / totalTasks) * 100;
 
-  // Inline style objects
+  // Inline style objects for various parts of the sidebar
+
+  // Container for the entire sidebar
   const sidebarContainerStyle = {
     backgroundColor: theme === "dark" ? "#292929" : "#f8f9fa",
     display: "flex",
@@ -23,6 +27,7 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
     minHeight: "100vh",
   };
 
+  // Default style for each navigation link
   const navLinkStyle = {
     color: theme === "dark" ? "white" : "#333",
     padding: "0.75rem 1rem",
@@ -35,12 +40,14 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
     cursor: "pointer",
   };
 
+  // Active navigation link style overrides the default style
   const activeNavLinkStyle = {
     ...navLinkStyle,
     backgroundColor: "rgb(36, 46, 36)",
     color: "#4caf50",
   };
 
+  // Style for the "Add List" button
   const addTaskBtnStyle = {
     width: "100%",
     background: "none",
@@ -57,6 +64,7 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
     marginBottom: "1rem",
   };
 
+  // Style for the "Today Tasks" card container
   const todayTasksStyle = {
     backgroundColor: theme === "dark" ? "#212121" : "#e9ecef",
     borderRadius: "12px",
@@ -65,6 +73,7 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
     marginBottom: "1rem",
   };
 
+  // Style for displaying the task count badge
   const taskCountStyle = {
     backgroundColor: "rgba(76, 175, 80, 0.1)",
     color: "#4caf50",
@@ -73,12 +82,14 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
     fontSize: "0.875rem",
   };
 
+  // Container for the progress circle
   const progressCircleContainerStyle = {
     display: "flex",
     justifyContent: "center",
     padding: "1rem 0",
   };
 
+  // Style for the progress circle SVG container
   const progressCircleStyle = {
     position: "relative",
     width: "100px",
@@ -88,6 +99,7 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
     justifyContent: "center",
   };
 
+  // Centered text inside the progress circle
   const progressCenterStyle = {
     position: "absolute",
     top: "50%",
@@ -96,6 +108,7 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
     textAlign: "center",
   };
 
+  // Style for the logout button at the bottom
   const logoutButtonStyle = {
     background: "none",
     border: "none",
@@ -107,17 +120,18 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
     marginBottom: "0.5rem",
   };
 
+  // Handler to log out the user
   const handleLogout = () => {
     dispatch(logout());
   };
 
   return (
     <div style={sidebarContainerStyle} className="h-100">
-      {/* Header */}
+      {/* Header Section: Displays user avatar and name */}
       <div style={{ padding: "1rem", marginBottom: "1rem" }}>
         <div className="d-flex align-items-center">
           <img
-            src={user?.avatar || "/placeholder.svg?height=40&width=40"}
+            src={"/assets/user.png" || "/placeholder.svg?height=40&width=40"}
             alt="User avatar"
             className="rounded-circle me-2"
             width="40"
@@ -131,7 +145,7 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
         </div>
       </div>
 
-      {/* Navigation */}
+      {/* Navigation Links Section */}
       <div style={{ paddingLeft: "1rem", paddingRight: "1rem" }}>
         <nav className="nav flex-column">
           <div
@@ -164,11 +178,13 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
           </div>
         </nav>
 
+        {/* "Add List" Button */}
         <button style={addTaskBtnStyle}>
           <Plus size={18} style={{ marginRight: "0.5rem" }} />
           Add List
         </button>
 
+        {/* Today Tasks Card */}
         <div style={todayTasksStyle}>
           <div
             className="d-flex justify-content-between align-items-center"
@@ -178,6 +194,7 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
             <span style={taskCountStyle}>{totalTasks}</span>
           </div>
 
+          {/* Progress Circle displaying percentage */}
           <div style={progressCircleContainerStyle}>
             <div style={progressCircleStyle}>
               <svg
@@ -219,7 +236,7 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
         </div>
       </div>
 
-      {/* Logout */}
+      {/* Logout Section at the bottom */}
       <div style={{ marginTop: "auto", padding: "1rem" }}>
         <button
           onClick={handleLogout}
