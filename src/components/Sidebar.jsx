@@ -1,4 +1,4 @@
-"use client";
+
 
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/auth/authSlice";
@@ -43,8 +43,8 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
   // Active navigation link style overrides the default style
   const activeNavLinkStyle = {
     ...navLinkStyle,
-    backgroundColor: "rgb(36, 46, 36)",
-    color: "#4caf50",
+    backgroundColor: "#4caf50",
+    color: "rgb(245, 244, 244)",
   };
 
   // Style for the "Add List" button

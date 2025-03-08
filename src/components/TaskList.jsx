@@ -1,29 +1,28 @@
-"use client";
-
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { addTask, toggleTaskCompletion, toggleImportant } from "../store/tasks/tasksSlice";
-import { Star, Bell, RotateCcw, Calendar } from "lucide-react";
+import { Star, Bell, RotateCcw, Calendar, X } from "lucide-react";
 import { useTheme } from "../contexts/ThemeContext";
 import { format } from "date-fns";
 import WeatherWidget from "./WeatherWidget";
+import { DayPicker } from "react-day-picker"; // Import react-day-picker for calendar UI
+import "react-day-picker/dist/style.css"; // Import default styles (customize as needed)
 
 const TaskList = ({ onSelectTask, filterImportant = false, selectedTaskId = null }) => {
   const dispatch = useDispatch();
 
-  // Retrieve tasks and loading state from Redux store.
+  // Retrieve tasks and loading state from the Redux store.
   const { tasks, loading } = useSelector((state) => state.tasks);
 
-  // Local state for new task title and due date.
+  // Local state for the new task's title, due date, and visibility of the date picker modal.
   const [newTaskTitle, setNewTaskTitle] = useState("");
   const [newTaskDueDate, setNewTaskDueDate] = useState("");
   const [showDatePicker, setShowDatePicker] = useState(false);
 
-  // Get theme from our custom ThemeContext.
+  // Get the current theme from our custom ThemeContext.
   const { theme } = useTheme();
 
-  // Handler for adding a new task.
-  // Dispatches the addTask action with the new task data.
+  // Handler to add a new task to the store.
   const handleAddTask = (e) => {
     e.preventDefault();
     if (newTaskTitle.trim()) {
@@ -35,39 +34,38 @@ const TaskList = ({ onSelectTask, filterImportant = false, selectedTaskId = null
           dueDate: newTaskDueDate || null,
         })
       );
-      // Clear input fields after dispatching.
+      // Clear input fields after the task is added.
       setNewTaskTitle("");
       setNewTaskDueDate("");
     }
   };
 
-  // Handler for toggling task completion status.
+  // Handler to toggle the completion status of a task.
   const handleToggleTask = (id) => {
     dispatch(toggleTaskCompletion(id));
   };
 
-  // Handler for toggling the "important" flag on a task.
-  // Stops propagation so the parent click event doesn't trigger.
+  // Handler to toggle the "important" flag on a task.
   const handleToggleImportant = (id, e) => {
     e.stopPropagation();
     dispatch(toggleImportant(id));
   };
 
-  // Filter tasks based on whether we're showing only important tasks.
+  // Filter tasks based on whether only important tasks should be shown.
   const filteredTasks = filterImportant 
     ? tasks.filter((task) => task.important)
     : tasks;
 
-  // Separate incomplete and completed tasks.
+  // Separate tasks into incomplete and completed groups.
   const incompleteTasks = filteredTasks.filter((task) => !task.completed);
   const completedTasks = filteredTasks.filter((task) => task.completed);
 
-  // Handler for selecting a task (e.g. to view details).
+  // Handler for selecting a task (e.g., to view details).
   const handleTaskSelect = (task) => {
     onSelectTask(task);
   };
 
-  // Helper function to calculate time left until the task's due date.
+  // Helper function to calculate the remaining time until a task's due date.
   const getTimeLeft = (dueDate) => {
     if (!dueDate) return "";
     const now = new Date();
@@ -81,13 +79,13 @@ const TaskList = ({ onSelectTask, filterImportant = false, selectedTaskId = null
     return "Less than 1 hour left";
   };
 
-  // Handler for selecting a due date from the date picker.
+  // Handler to select a due date from the date picker.
   const handleDateSelect = (date) => {
     setNewTaskDueDate(date.toISOString());
     setShowDatePicker(false);
   };
 
-  // Refresh handler to reset input fields and close the date picker.
+  // Handler to refresh the add-task form and close the date picker.
   const handleRefresh = () => {
     setNewTaskTitle("");
     setNewTaskDueDate("");
@@ -104,7 +102,7 @@ const TaskList = ({ onSelectTask, filterImportant = false, selectedTaskId = null
           display: flex;
           flex-direction: column;
         }
-        /* Add Task Section */
+        /* Styles for the Add Task Section */
         .add-task-section {
           padding: 1rem 1.5rem;
           background-color: ${theme === "dark" ? "#2c332d" : "#E5EBE6"};
@@ -131,7 +129,7 @@ const TaskList = ({ onSelectTask, filterImportant = false, selectedTaskId = null
         .task-input::placeholder {
           color: ${theme === "dark" ? "rgba(255,255,255,0.6)" : "#888"};
         }
-        /* Action Buttons Row */
+        /* Styles for the Action Buttons Row */
         .action-buttons {
           display: flex;
           justify-content: space-between;
@@ -166,7 +164,7 @@ const TaskList = ({ onSelectTask, filterImportant = false, selectedTaskId = null
         .add-task-btn:hover {
           background-color: #3d843f;
         }
-        /* Date Picker Overlay */
+        /* Styles for the Date Picker Modal Overlay */
         .date-picker-overlay {
           position: fixed;
           top: 0;
@@ -185,33 +183,9 @@ const TaskList = ({ onSelectTask, filterImportant = false, selectedTaskId = null
           border-radius: 8px;
           box-shadow: 0 2px 10px rgba(0,0,0,0.3);
           text-align: center;
+          position: relative;
         }
-        .date-picker-card h6 {
-          margin-bottom: 1rem;
-          color: ${theme === "dark" ? "white" : "#333"};
-        }
-        .date-options {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 0.5rem;
-          justify-content: center;
-        }
-        .date-options button {
-          padding: 0.5rem 1rem;
-          border: 1px solid ${theme === "dark" ? "#777" : "#ccc"};
-          border-radius: 4px;
-          background: none;
-          cursor: pointer;
-          color: ${theme === "dark" ? "white" : "#333"};
-        }
-        .date-options button:hover {
-          background-color: ${theme === "dark" ? "#555" : "#f0f0f0"};
-        }
-        .selected-date-display {
-          margin-bottom: 1rem;
-          color: ${theme === "dark" ? "rgba(255,255,255,0.7)" : "#555"};
-        }
-        /* Task List */
+        /* Styles for the Task List Section */
         .tasks-container {
           flex: 1;
           overflow-y: auto;
@@ -243,6 +217,7 @@ const TaskList = ({ onSelectTask, filterImportant = false, selectedTaskId = null
           color: ${theme === "dark" ? "rgba(255,255,255,0.5)" : "rgba(0,0,0,0.5)"};
           text-decoration: line-through;
         }
+        /* Styles for the Star Button */
         .star-btn {
           background: none;
           border: none;
@@ -259,6 +234,7 @@ const TaskList = ({ onSelectTask, filterImportant = false, selectedTaskId = null
           color: #ffd700;
           fill: ${theme === "dark" ? "white" : "black"};
         }
+        /* Styles for custom checkboxes */
         .custom-checkbox {
           position: relative;
           width: 20px;
@@ -295,6 +271,7 @@ const TaskList = ({ onSelectTask, filterImportant = false, selectedTaskId = null
           border-width: 0 2px 2px 0;
           transform: rotate(45deg);
         }
+        /* Scrollbar styling for the task list */
         .tasks-container::-webkit-scrollbar {
           width: 8px;
         }
@@ -316,13 +293,14 @@ const TaskList = ({ onSelectTask, filterImportant = false, selectedTaskId = null
 
       {/* Main container for the task list */}
       <div className="task-list-container">
-        {/* Section for adding a new task */}
+        {/* Add Task Section */}
         <div className="add-task-section">
           <h2 className="add-task-header">
             {filterImportant ? "Important Tasks" : "Add A Task"}
           </h2>
+          {/* Form for adding a new task */}
           <form onSubmit={handleAddTask} className="add-task-form">
-            {/* Input for task title */}
+            {/* Task title input */}
             <input
               type="text"
               value={newTaskTitle}
@@ -330,24 +308,20 @@ const TaskList = ({ onSelectTask, filterImportant = false, selectedTaskId = null
               placeholder="Add a task..."
               className="task-input"
             />
-            {/* Row for action buttons */}
+            {/* Action buttons: Bell, Refresh, Calendar */}
             <div className="action-buttons">
               <div className="left-buttons">
-                {/* Button for potential notifications (e.g., reminders) */}
                 <button type="button">
                   <Bell size={20} />
                 </button>
-                {/* Button to refresh/reset the add task form */}
                 <button type="button" onClick={handleRefresh}>
                   <RotateCcw size={20} />
                 </button>
-                {/* Button to toggle the date picker overlay */}
                 <button type="button" onClick={() => setShowDatePicker(!showDatePicker)}>
                   <Calendar size={20} />
                 </button>
               </div>
               <div className="right-button">
-                {/* Submit button to add the new task */}
                 <button type="submit" className="add-task-btn">
                   ADD TASK
                 </button>
@@ -355,27 +329,37 @@ const TaskList = ({ onSelectTask, filterImportant = false, selectedTaskId = null
             </div>
           </form>
 
-          {/* Date Picker Modal Overlay */}
+          {/* Date Picker Modal Overlay with a Close Button */}
           {showDatePicker && (
             <div className="date-picker-overlay">
               <div className="date-picker-card">
-                <h6>Select Due Date</h6>
-                <div className="date-options">
-                  {/* Render date options for the next 7 days */}
-                  {[...Array(7)].map((_, i) => {
-                    const date = new Date();
-                    date.setDate(date.getDate() + i);
-                    return (
-                      <button key={i} onClick={() => handleDateSelect(date)}>
-                        {i === 0 ? "Today" : format(date, "EEE, MMM d")}
-                      </button>
-                    );
-                  })}
-                </div>
+                {/* Close button for the date picker */}
+                <button
+                  onClick={() => setShowDatePicker(false)}
+                  style={{
+                    position: "absolute",
+                    top: "8px",
+                    right: "8px",
+                    background: "none",
+                    border: "none",
+                    color: theme === "dark" ? "rgba(255,255,255,0.7)" : "#333",
+                    cursor: "pointer",
+                  }}
+                >
+                  <X size={16} />
+                </button>
+                {/* Render the DayPicker for selecting a due date */}
+                <DayPicker
+                  mode="single"
+                  selected={newTaskDueDate ? new Date(newTaskDueDate) : undefined}
+                  onSelect={(date) => date && handleDateSelect(date)}
+                  disabled={{ before: new Date() }} // Disable selection of past dates
+                />
               </div>
             </div>
           )}
-          {/* Display selected due date and time left */}
+
+          {/* Display the selected due date and the time left until that date */}
           {newTaskDueDate && (
             <div className="selected-date-display">
               Due: {format(new Date(newTaskDueDate), "PPP")} ({getTimeLeft(newTaskDueDate)})
@@ -383,17 +367,17 @@ const TaskList = ({ onSelectTask, filterImportant = false, selectedTaskId = null
           )}
         </div>
 
-        {/* Section for displaying the list of tasks */}
+        {/* Task List Section */}
         <div className="tasks-container">
           {loading ? (
-            // Show a loading spinner while tasks are being fetched.
+            // Show a loading indicator while tasks are being fetched
             <div className="text-center p-4">
               <div className="spinner-border text-primary" role="status">
                 <span className="visually-hidden">Loading...</span>
               </div>
             </div>
           ) : filteredTasks.length === 0 ? (
-            // Message to display if no tasks are found.
+            // Display a message when no tasks are available
             <div className="text-center text-muted p-4">
               <p>
                 {filterImportant
@@ -402,9 +386,8 @@ const TaskList = ({ onSelectTask, filterImportant = false, selectedTaskId = null
               </p>
             </div>
           ) : (
-            // Render the tasks list.
+            // Render the list of tasks
             <div className="tasks-list">
-              {/* Render incomplete tasks */}
               {incompleteTasks.map((task) => (
                 <div
                   key={task.id}
@@ -412,7 +395,7 @@ const TaskList = ({ onSelectTask, filterImportant = false, selectedTaskId = null
                   onClick={() => handleTaskSelect(task)}
                 >
                   <div className="d-flex align-items-center flex-grow-1">
-                    {/* Custom checkbox for task completion */}
+                    {/* Custom checkbox for marking a task as completed */}
                     <div className="custom-checkbox">
                       <input
                         type="checkbox"
@@ -423,13 +406,13 @@ const TaskList = ({ onSelectTask, filterImportant = false, selectedTaskId = null
                       />
                       <label onClick={(e) => e.stopPropagation()} htmlFor={`task-${task.id}`}></label>
                     </div>
-                    {/* Render WeatherWidget for each task (fetches weather based on saved city) */}
+                    {/* Render the WeatherWidget */}
                     <div style={{ marginRight: "8px" }}>
                       <WeatherWidget />
                     </div>
-                    {/* Display task title */}
+                    {/* Display the task title */}
                     <span className="task-title">{task.title}</span>
-                    {/* Display time left if task has a due date */}
+                    {/* Show the due date and time left if available */}
                     {task.dueDate && (
                       <span
                         className="time-left"
@@ -444,7 +427,7 @@ const TaskList = ({ onSelectTask, filterImportant = false, selectedTaskId = null
                       </span>
                     )}
                   </div>
-                  {/* Button to toggle the task's "important" flag */}
+                  {/* Star button to toggle the important flag */}
                   <button
                     className={`star-btn ${task.important ? "important" : ""}`}
                     onClick={(e) => handleToggleImportant(task.id, e)}
@@ -454,7 +437,6 @@ const TaskList = ({ onSelectTask, filterImportant = false, selectedTaskId = null
                 </div>
               ))}
 
-              {/* Render completed tasks in a separate section */}
               {completedTasks.length > 0 && (
                 <div className="completed-section mt-4">
                   <h6 className="text-muted mb-3">Completed</h6>
@@ -476,13 +458,13 @@ const TaskList = ({ onSelectTask, filterImportant = false, selectedTaskId = null
                           />
                           <label onClick={(e) => e.stopPropagation()} htmlFor={`task-${task.id}`}></label>
                         </div>
-                        {/* Render WeatherWidget for the completed task */}
+                        {/* Render the WeatherWidget */}
                         <div style={{ marginRight: "8px" }}>
                           <WeatherWidget />
                         </div>
-                        {/* Display task title */}
+                        {/* Display the task title */}
                         <span className="task-title">{task.title}</span>
-                        {/* Display time left if task has a due date */}
+                        {/* Show the due date and time left if available */}
                         {task.dueDate && (
                           <span
                             className="time-left"
@@ -497,7 +479,7 @@ const TaskList = ({ onSelectTask, filterImportant = false, selectedTaskId = null
                           </span>
                         )}
                       </div>
-                      {/* Button to toggle the task's "important" flag */}
+                      {/* Star button for toggling important flag */}
                       <button
                         className={`star-btn ${task.important ? "important" : ""}`}
                         onClick={(e) => handleToggleImportant(task.id, e)}

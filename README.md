@@ -1,58 +1,95 @@
-TODO_APP
-A modern, intuitive TODO application built with React (Next.js) and Redux for managing your daily tasks. This project allows you to easily add, edit, mark as complete, and delete tasks, with a sleek, responsive design that supports both light and dark themes.
-
-Features
-Task Management: Create, edit, and delete tasks.
-Task Editing: Open a sidebar editor to update task details.
-Mark as Important: Easily star tasks to prioritize them.
-Responsive Design: Optimized for both desktop and mobile views.
-Dark/Light Theme Support: Seamlessly switch between themes.
-State Management: Powered by Redux for efficient state handling.
-Technologies
-React / Next.js: For building modern, scalable user interfaces.
-Redux: For robust state management.
-Lucide Icons: For crisp, scalable icons throughout the UI.
-CSS & Bootstrap: For styling and layout.
-
-Getting Started
-Prerequisites
-Node.js (version 14 or above)
-npm or Yarn
-
-Installation
-Clone the repository:
-    git clone https://github.com/aabid2947/TODO_APP.git
-    cd TODO_APP
-
-Install dependencies:
-    npm install
-    # or
-    yarn install
-
-Running the Application
-Start the development server with:
-    npm run dev
-    # or
-    yarn dev
-    Then, open http://localhost:5137 in your browser to view the app.
-
-Building for Production
-To build the app for production, run:
-    npm run build
-    npm start
-    Project Structure
+Task Manager Pro 🚀
+A modern task management application with weather integration, theme customization, and progress tracking.
 
 
-A typical project structure might look like this:
-TODO_APP/
-├── app/            # Main Next.js app folder (if using app directory)
-├── components/     # Reusable UI components (e.g., TaskEditor, TaskList)
-├── store/          # Redux store and slices
-├── public/         # Static assets
-└── README.md       # This file
+🌟 Features
+    📝 Task Management
+        -Create and edit tasks
+        -Add due dates and reminders
+        -Mark tasks as important
+        -Add subtasks
+        -Schedule tasks
+        -Mark tasks as completed
+        -Reopen completed tasks
 
-Contributing
-Contributions are welcome! Feel free to fork the repository and submit a pull request with improvements, bug fixes, or new features.
+    🌤️ Weather Integration
+        -Real-time weather updates
+        -City-based weather display
+        -Dynamic weather icons
 
-License
-This project is licensed under the MIT License
+    🎨 Theme Options
+        -Dark/Light mode toggle
+        -Persistent theme preferences
+
+    📊 Progress Tracking
+        -Visual task completion graphs
+        -Performance analytics
+🛠️ Tech Stack
+    Frontend:
+        -React 18
+        -Redux Toolkit
+        -Bootstrap 5
+        -Chart.js
+        -Lucide React
+        -State Management:
+
+        -Redux
+        -Redux Persist
+
+🚀 Quick Start
+    1.Clone the repository
+        git clone https://github.com/yourusername/task-manager-pro.git
+        cd task-manager-pro
+
+    2.Install dependencies
+        npm install
+    
+    3.Set up environment variables Create a .env file in the root directory:
+        VITE_API_KEY=your_api_key_here
+
+    4.Start the development server
+        npm run dev
+
+📁 Project Structure
+    TO-DO-APP/
+    ├── src/
+    │   ├── components/      # React components
+    │   ├── store/          # Redux store
+    │   ├── contexts/       # Theme context
+    │   ├── pages/         # dashbord and login page
+    │   └── assets/         # Images & icons
+    ├── public/
+    └── package.json
+
+🔧 Configuration
+    -Weather API Setup
+        1.Get API key from WeatherAPI
+        2.Add key to .env file
+    -Theme Configuration
+        -Theme settings are managed through ThemeContext
+        -Automatically saves user preference
+
+📦 Dependencies
+    {
+    "react": "^18.2.0",
+    "react-redux": "^8.0.5",
+    "redux-toolkit": "^1.9.3",
+    "bootstrap": "^5.2.3",
+    "chart.js": "^4.2.1",
+    "lucide-react": "^0.188.0"
+    }
+
+🤝 Contributing
+    1.Fork the repo
+    2.Create feature branch:
+        git checkout -b feature/AmazingFeature
+    3.Commit changes:
+        git commit -m 'Add AmazingFeature'
+    4.Push to branch:
+        git push origin feature/AmazingFeature
+
+📝 License
+Distributed under the MIT License. See LICENSE for more information.
+
+👥 Author
+Md Aabid Hussain - @aabid2947

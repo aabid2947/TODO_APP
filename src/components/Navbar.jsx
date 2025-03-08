@@ -1,4 +1,3 @@
-"use client";
 
 import React from "react";
 import { Menu, Search, Settings, Sun, Moon } from "lucide-react";

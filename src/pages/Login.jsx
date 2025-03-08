@@ -1,4 +1,3 @@
-"use client"; // Marks this as a client-side component
 
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
