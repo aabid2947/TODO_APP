@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Plus, Star, Bell, Calendar, RotateCcw, X, Trash2 } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { deleteTask, updateTask } from "../store/tasks/tasksSlice";
@@ -10,33 +10,37 @@ export default function TaskEditor({ task, onClose }) {
   const dispatch = useDispatch();
   const { theme } = useTheme();
 
-  // Local state:
-  // - isChecked: reflects if the task is completed.
-  // - showDatePicker: controls visibility of the date picker modal.
-  // - selectedDate: stores the currently selected due date.
+  // Local state variables:
+  // - isChecked: reflects if the task is marked as completed.
+  // - showDatePicker: controls the visibility of the date picker modal.
+  // - selectedDate: holds the currently selected due date.
   const [isChecked, setIsChecked] = useState(task?.completed || false);
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [selectedDate, setSelectedDate] = useState(task?.dueDate ? new Date(task.dueDate) : null);
+  const [selectedDate, setSelectedDate] = useState(
+    task?.dueDate ? new Date(task.dueDate) : null
+  );
 
   // Toggle the "important" flag on the task.
   const handleToggleImportant = () => {
     dispatch(updateTask({ ...task, important: !task.important }));
   };
 
-  // Toggle task completion when the checkbox is clicked.
+  // Toggle task completion:
+  // Updates local state and dispatches an update to Redux.
   const handleToggleCompletion = () => {
     const newValue = !isChecked;
     setIsChecked(newValue);
     dispatch(updateTask({ ...task, completed: newValue }));
   };
 
-  // Delete the task.
+  // Delete the task and close the editor.
   const handleDelete = () => {
     dispatch(deleteTask(task.id));
     onClose();
   };
 
-  // Repeat task: if the task is completed, mark it as uncompleted.
+  // Repeat task:
+  // If the task is completed, mark it as uncompleted.
   const handleRepeat = () => {
     if (task && task.completed) {
       dispatch(updateTask({ ...task, completed: false }));
@@ -50,7 +54,8 @@ export default function TaskEditor({ task, onClose }) {
     setShowDatePicker(true);
   };
 
-  // Handle selection of a date from the date picker.
+  // Handle selection of a due date from the date picker.
+  // Update the selected date and dispatch the update.
   const handleDateSelect = (date) => {
     setSelectedDate(date);
     dispatch(updateTask({ ...task, dueDate: date.toISOString() }));
@@ -74,7 +79,7 @@ export default function TaskEditor({ task, onClose }) {
           position: "relative",
         }}
       >
-        {/* Top Section: Task Title, Completion Checkbox, and Important Star */}
+        {/* Top Section: Displays task title, completion checkbox, and important star */}
         <div className="p-3">
           <div className="d-flex align-items-center mb-3">
             {/* Checkbox for toggling task completion */}
@@ -92,7 +97,7 @@ export default function TaskEditor({ task, onClose }) {
                   borderColor: theme === "dark" ? "rgba(255,255,255,0.5)" : "#666",
                 }}
               />
-              {/* Task title with strikethrough if completed */}
+              {/* Task title label with strikethrough if completed */}
               <label
                 className="form-check-label"
                 htmlFor="todoCheck"
@@ -104,7 +109,7 @@ export default function TaskEditor({ task, onClose }) {
                 {task ? task.title : "Task Title"}
               </label>
             </div>
-            {/* Star icon to toggle the important flag, with smooth transition */}
+            {/* Button to toggle the "important" flag */}
             <button
               className="btn"
               onClick={handleToggleImportant}
@@ -120,7 +125,7 @@ export default function TaskEditor({ task, onClose }) {
             </button>
           </div>
 
-          {/* List of Action Options */}
+          {/* Action Options List */}
           <ul className="list-unstyled" style={{ marginBottom: "1rem" }}>
             <li>
               {/* Add Step option */}
@@ -167,14 +172,14 @@ export default function TaskEditor({ task, onClose }) {
           </ul>
         </div>
 
-        {/* Footer Section: Close and Delete Buttons */}
+        {/* Footer Section: Contains Close and Delete Buttons */}
         <div
           className="d-flex justify-content-between align-items-center p-2"
           style={{
             borderTop: `1px solid ${borderColor}`,
           }}
         >
-          {/* Close the editor */}
+          {/* Close Button */}
           <button
             className="btn"
             style={{
@@ -187,7 +192,7 @@ export default function TaskEditor({ task, onClose }) {
           >
             <X size={18} />
           </button>
-          {/* Display task creation info */}
+          {/* Task creation information */}
           <span
             style={{
               color: theme === "dark" ? "rgba(255,255,255,0.5)" : "#666",
@@ -196,7 +201,7 @@ export default function TaskEditor({ task, onClose }) {
           >
             Created Today
           </span>
-          {/* Delete the task */}
+          {/* Delete Button */}
           <button
             className="btn"
             style={{
@@ -212,7 +217,7 @@ export default function TaskEditor({ task, onClose }) {
         </div>
       </div>
 
-      {/* Date Picker Modal Overlay with Close Button */}
+      {/* Date Picker Modal Overlay */}
       {showDatePicker && (
         <div
           style={{
@@ -238,7 +243,7 @@ export default function TaskEditor({ task, onClose }) {
               position: "relative",
             }}
           >
-            {/* Close button for the date picker */}
+            {/* Close button for the date picker modal */}
             <button
               onClick={() => setShowDatePicker(false)}
               style={{
@@ -253,12 +258,12 @@ export default function TaskEditor({ task, onClose }) {
             >
               <X size={16} />
             </button>
-            {/* Date Picker for selecting a due date; past dates are disabled */}
+            {/* Render the DayPicker component for due date selection */}
             <DayPicker
               mode="single"
               selected={selectedDate}
               onSelect={(date) => date && handleDateSelect(date)}
-              disabled={{ before: new Date() }}
+              disabled={{ before: new Date() }} // Disable selection of past dates
             />
           </div>
         </div>

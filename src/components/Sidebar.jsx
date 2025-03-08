@@ -1,33 +1,34 @@
-
-
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../store/auth/authSlice";
 import { useTheme } from "../contexts/ThemeContext";
-import { Home, CheckSquare, Calendar, Star, LogOut, Plus } from "lucide-react";
+import { Home, CheckSquare, Calendar, Star, LogOut } from "lucide-react";
 
 const Sidebar = ({ user, activeView = "all", onViewChange }) => {
+  // Initialize dispatch function from Redux.
   const dispatch = useDispatch();
+
+  // Retrieve the current theme from the ThemeContext.
   const { theme } = useTheme();
 
-  // Retrieve the tasks from Redux store
+  // Retrieve tasks from the Redux store.
   const { tasks } = useSelector((state) => state.tasks);
-  // Calculate total tasks and number of completed tasks
+  // Calculate total number of tasks.
   const totalTasks = tasks?.length || 0;
+  // Calculate number of tasks that are completed.
   const completedTasks = tasks?.filter((task) => task.completed).length || 0;
-  // Calculate the progress percentage of completed tasks
+  // Calculate progress percentage (completed tasks over total tasks).
   const progressPercentage = totalTasks === 0 ? 0 : (completedTasks / totalTasks) * 100;
 
-  // Inline style objects for various parts of the sidebar
-
-  // Container for the entire sidebar
+  // Define styles for the sidebar container.
   const sidebarContainerStyle = {
     backgroundColor: theme === "dark" ? "#292929" : "#f8f9fa",
     display: "flex",
     flexDirection: "column",
     minHeight: "100vh",
+    overflowY: "auto", // Enable vertical scrolling if content overflows.
   };
 
-  // Default style for each navigation link
+  // Default style for each navigation link.
   const navLinkStyle = {
     color: theme === "dark" ? "white" : "#333",
     padding: "0.75rem 1rem",
@@ -40,31 +41,14 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
     cursor: "pointer",
   };
 
-  // Active navigation link style overrides the default style
+  // Style overrides for an active navigation link.
   const activeNavLinkStyle = {
     ...navLinkStyle,
     backgroundColor: "#4caf50",
     color: "rgb(245, 244, 244)",
   };
 
-  // Style for the "Add List" button
-  const addTaskBtnStyle = {
-    width: "100%",
-    background: "none",
-    border: `1px dashed ${theme === "dark" ? "rgba(255, 255, 255, 0.2)" : "rgba(0, 0, 0, 0.2)"}`,
-    color: theme === "dark" ? "white" : "#333",
-    padding: "0.75rem",
-    borderRadius: "8px",
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    transition: "all 0.2s ease",
-    cursor: "pointer",
-    marginTop: "1rem",
-    marginBottom: "1rem",
-  };
-
-  // Style for the "Today Tasks" card container
+  // Style for the "Today Tasks" card container.
   const todayTasksStyle = {
     backgroundColor: theme === "dark" ? "#212121" : "#e9ecef",
     borderRadius: "12px",
@@ -73,7 +57,7 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
     marginBottom: "1rem",
   };
 
-  // Style for displaying the task count badge
+  // Style for displaying the task count badge.
   const taskCountStyle = {
     backgroundColor: "rgba(76, 175, 80, 0.1)",
     color: "#4caf50",
@@ -82,14 +66,14 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
     fontSize: "0.875rem",
   };
 
-  // Container for the progress circle
+  // Container style for the progress circle.
   const progressCircleContainerStyle = {
     display: "flex",
     justifyContent: "center",
     padding: "1rem 0",
   };
 
-  // Style for the progress circle SVG container
+  // Style for the progress circle SVG container.
   const progressCircleStyle = {
     position: "relative",
     width: "100px",
@@ -99,7 +83,7 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
     justifyContent: "center",
   };
 
-  // Centered text inside the progress circle
+  // Centered text inside the progress circle.
   const progressCenterStyle = {
     position: "absolute",
     top: "50%",
@@ -108,7 +92,7 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
     textAlign: "center",
   };
 
-  // Style for the logout button at the bottom
+  // Style for the logout button.
   const logoutButtonStyle = {
     background: "none",
     border: "none",
@@ -117,10 +101,12 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
     width: "100%",
     display: "flex",
     alignItems: "center",
-    marginBottom: "0.5rem",
+    padding: "1rem",
+    marginTop: "1rem",
   };
 
-  // Handler to log out the user
+  // Handler function to log out the user.
+  // Dispatches the logout action from the auth slice.
   const handleLogout = () => {
     dispatch(logout());
   };
@@ -131,6 +117,7 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
       <div style={{ padding: "1rem", marginBottom: "1rem" }}>
         <div className="d-flex align-items-center">
           <img
+            // Display user avatar. If user image is unavailable, use a placeholder.
             src={"/assets/user.png" || "/placeholder.svg?height=40&width=40"}
             alt="User avatar"
             className="rounded-circle me-2"
@@ -148,6 +135,7 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
       {/* Navigation Links Section */}
       <div style={{ paddingLeft: "1rem", paddingRight: "1rem" }}>
         <nav className="nav flex-column">
+          {/* All Tasks Navigation Link */}
           <div
             style={activeView === "all" ? activeNavLinkStyle : navLinkStyle}
             onClick={() => onViewChange("all")}
@@ -155,6 +143,7 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
             <CheckSquare size={18} style={{ marginRight: "0.5rem" }} />
             <span>All Tasks</span>
           </div>
+          {/* Important Tasks Navigation Link */}
           <div
             style={activeView === "important" ? activeNavLinkStyle : navLinkStyle}
             onClick={() => onViewChange("important")}
@@ -162,6 +151,7 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
             <Star size={18} style={{ marginRight: "0.5rem" }} />
             <span>Important</span>
           </div>
+          {/* Planned Tasks Navigation Link */}
           <div
             style={activeView === "planned" ? activeNavLinkStyle : navLinkStyle}
             onClick={() => onViewChange("planned")}
@@ -169,6 +159,7 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
             <Calendar size={18} style={{ marginRight: "0.5rem" }} />
             <span>Planned</span>
           </div>
+          {/* Assigned to Me Navigation Link */}
           <div
             style={activeView === "assigned" ? activeNavLinkStyle : navLinkStyle}
             onClick={() => onViewChange("assigned")}
@@ -178,12 +169,6 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
           </div>
         </nav>
 
-        {/* "Add List" Button */}
-        <button style={addTaskBtnStyle}>
-          <Plus size={18} style={{ marginRight: "0.5rem" }} />
-          Add List
-        </button>
-
         {/* Today Tasks Card */}
         <div style={todayTasksStyle}>
           <div
@@ -191,10 +176,11 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
             style={{ marginBottom: "1rem" }}
           >
             <h6 style={{ margin: 0 }}>Today Tasks</h6>
+            {/* Display total tasks count */}
             <span style={taskCountStyle}>{totalTasks}</span>
           </div>
 
-          {/* Progress Circle displaying percentage */}
+          {/* Progress Circle displaying completion percentage */}
           <div style={progressCircleContainerStyle}>
             <div style={progressCircleStyle}>
               <svg
@@ -205,6 +191,7 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
                   height: "100%",
                 }}
               >
+                {/* Background circle */}
                 <path
                   d="M18 2.0845
                      a 15.9155 15.9155 0 0 1 0 31.831
@@ -213,6 +200,7 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
                   stroke={theme === "dark" ? "#2b2b2b" : "#e0e0e0"}
                   strokeWidth="3"
                 />
+                {/* Progress circle */}
                 <path
                   d="M18 2.0845
                      a 15.9155 15.9155 0 0 1 0 31.831
@@ -223,6 +211,7 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
                   strokeDasharray={`${progressPercentage}, 100`}
                 />
               </svg>
+              {/* Centered text showing percentage and task count */}
               <div style={progressCenterStyle}>
                 <div style={{ fontSize: "1.25rem", fontWeight: 500, color: "#4caf50" }}>
                   {Math.round(progressPercentage)}%
@@ -234,15 +223,9 @@ const Sidebar = ({ user, activeView = "all", onViewChange }) => {
             </div>
           </div>
         </div>
-      </div>
 
-      {/* Logout Section at the bottom */}
-      <div style={{ marginTop: "auto", padding: "1rem" }}>
-        <button
-          onClick={handleLogout}
-          style={logoutButtonStyle}
-          className="d-flex align-items-center mb-2"
-        >
+        {/* Logout Button placed just below the Today Tasks card */}
+        <button onClick={handleLogout} style={logoutButtonStyle} className="d-flex align-items-center">
           <LogOut size={18} style={{ marginRight: "0.5rem" }} />
           <span>Logout</span>
         </button>

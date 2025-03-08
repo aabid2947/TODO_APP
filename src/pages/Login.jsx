@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../store/auth/authSlice";
@@ -6,28 +5,33 @@ import { useTheme } from "../contexts/ThemeContext";
 import { Sun, Moon } from "lucide-react";
 
 const Login = () => {
-  // State for login fields
-  const [email, setEmail] = useState("user@example.com"); // Stores the user's email input
-  const [password, setPassword] = useState("password"); // Stores the user's password input
-  const [city, setCity] = useState(""); // Stores the user's city input
+  // Only state for the city field is needed since email and password are hardcoded.
+  const [city, setCity] = useState("");
 
+  // Initialize dispatch function from Redux.
   const dispatch = useDispatch();
-  const { isAuthenticated, error, loading } = useSelector((state) => state.auth);
+
+  // Retrieve error and loading state from the auth slice.
+  const { error, loading } = useSelector((state) => state.auth);
+
+  // Get current theme and a function to toggle the theme from ThemeContext.
   const { theme, toggleTheme } = useTheme();
 
+  // Handler for form submission.
+  // It dispatches the login action with hardcoded credentials and the user-entered city.
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Dispatch the login action including the city value
-    dispatch(login({ email, password, city }));
+    dispatch(login({ email: "user@example.com", password: "password", city }));
   };
 
   return (
+    // Container div centers the form vertically and horizontally.
     <div
       className={`min-vh-100 d-flex flex-column align-items-center justify-content-center p-4 ${
         theme === "dark" ? "bg-dark" : "bg-light"
       }`}
     >
-      {/* Theme toggle button */}
+      {/* Theme toggle button positioned at the top-right corner */}
       <div className="position-absolute top-0 end-0 m-4">
         <button
           onClick={toggleTheme}
@@ -38,11 +42,13 @@ const Login = () => {
         </button>
       </div>
 
+      {/* Card container for the login form */}
       <div
         className={`card shadow-lg w-100 ${theme === "dark" ? "bg-dark text-white border-secondary" : ""}`}
         style={{ maxWidth: "400px" }}
       >
         <div className="card-body p-4">
+          {/* Header section with app name and a brief description */}
           <div className="text-center mb-4">
             <h1 className="h3 mb-2 text-primary">DoIt</h1>
             <p className={theme === "dark" ? "text-light" : "text-muted"}>
@@ -50,39 +56,16 @@ const Login = () => {
             </p>
           </div>
 
+          {/* Display error message if login fails */}
           {error && (
             <div className="alert alert-danger" role="alert">
               {error}
             </div>
           )}
 
+          {/* Login form */}
           <form onSubmit={handleSubmit}>
-            <div className="mb-3">
-              <label htmlFor="email" className="form-label">
-                Email
-              </label>
-              <input
-                type="email"
-                className={`form-control ${theme === "dark" ? "bg-dark text-white border-secondary" : ""}`}
-                id="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="password" className="form-label">
-                Password
-              </label>
-              <input
-                type="password"
-                className={`form-control ${theme === "dark" ? "bg-dark text-white border-secondary" : ""}`}
-                id="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-              />
-            </div>
+            {/* Input field for the city */}
             <div className="mb-3">
               <label htmlFor="city" className="form-label">
                 City
@@ -97,6 +80,7 @@ const Login = () => {
                 required
               />
             </div>
+            {/* Submit button with a loading indicator */}
             <button type="submit" className="btn btn-primary w-100 py-2" disabled={loading}>
               {loading ? (
                 <>
